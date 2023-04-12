@@ -4,6 +4,8 @@ import com.github.silencesu.behavior3java.actions.Error;
 import com.github.silencesu.behavior3java.actions.*;
 import com.github.silencesu.behavior3java.composites.MemPriority;
 import com.github.silencesu.behavior3java.composites.MemSequence;
+import com.github.silencesu.behavior3java.composites.Parallel;
+import com.github.silencesu.behavior3java.composites.ParallelSelector;
 import com.github.silencesu.behavior3java.composites.Priority;
 import com.github.silencesu.behavior3java.composites.Sequence;
 import com.github.silencesu.behavior3java.core.BaseNode;
@@ -15,6 +17,7 @@ import java.util.Map;
 
 /**
  * 默认节点
+ *
  * @author SilenceSu
  * @Email Silence.Sx@Gmail.com
  * Created by Silence on 2019/3/6.
@@ -26,8 +29,6 @@ public class DefaultNodes {
      * value node class
      */
     private static Map<String, Class<? extends BaseNode>> defaultNodes = new HashMap<>();
-
-
 
     static {
         //actions
@@ -43,6 +44,8 @@ public class DefaultNodes {
         defaultNodes.put("MemSequence", MemSequence.class);
         defaultNodes.put("Priority", Priority.class);
         defaultNodes.put("Sequence", Sequence.class);
+        defaultNodes.put("Parallel", Parallel.class);
+        defaultNodes.put("ParallelSelector", ParallelSelector.class);
 
         //decorators
         defaultNodes.put("Inverter", Inverter.class);
@@ -51,18 +54,17 @@ public class DefaultNodes {
         defaultNodes.put("Repeater", Repeater.class);
         defaultNodes.put("RepeatUntilFailure", RepeatUntilFailure.class);
         defaultNodes.put("RepeatUntilSuccess", RepeatUntilSuccess.class);
-
-
     }
+
     /**
      * 扩充Nodes节点
      */
-    public static Map<String,Class<? extends BaseNode>> extendCustomNodes(Map<String,Class<? extends BaseNode>> maps) {
+    public static Map<String, Class<? extends BaseNode>> extendCustomNodes(Map<String, Class<? extends BaseNode>> maps) {
         defaultNodes.putAll(maps);
         return defaultNodes;
     }
 
-    public static Map<String,Class<? extends BaseNode>> get(){
+    public static Map<String, Class<? extends BaseNode>> get() {
         return defaultNodes;
     }
 

@@ -3,6 +3,8 @@ package com.github.silencesu.behavior3java.core;
 import com.github.silencesu.behavior3java.constant.B3Const;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,6 +28,15 @@ public abstract class Composite extends BaseNode implements IComposite {
         return children.get(index);
     }
 
+    @Override
+    public List<BaseNode> getChildList() {
+        return this.children;
+    }
+
+    @Override
+    public void shuffle() {
+        Collections.shuffle(this.children);
+    }
 
     @Override
     public void addChild(BaseNode baseNode) {

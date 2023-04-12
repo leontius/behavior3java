@@ -1,6 +1,13 @@
 package com.github.silencesu.behavior3java;
 
+import com.github.silencesu.behavior3java.actions.FindItem;
 import com.github.silencesu.behavior3java.actions.Log;
+import com.github.silencesu.behavior3java.actions.RandMove;
+import com.github.silencesu.behavior3java.actions.RandWait;
+import com.github.silencesu.behavior3java.actions.Shoot;
+import com.github.silencesu.behavior3java.actions.TurnTarget;
+import com.github.silencesu.behavior3java.condition.HaveTarget;
+import com.github.silencesu.behavior3java.condition.HpLess;
 import com.github.silencesu.behavior3java.core.BaseNode;
 import com.github.silencesu.behavior3java.core.BehaviorTree;
 import com.github.silencesu.behavior3java.core.BehaviorTreeProject;
@@ -23,6 +30,13 @@ public class Loader {
     private static Map<String, Class<? extends BaseNode>> extendNodes = new HashMap<String, Class<? extends BaseNode>>() {
         {
             put("Log", Log.class);
+            put("FindItem", FindItem.class);
+            put("RandMove", RandMove.class);
+            put("RandWait", RandWait.class);
+            put("Shoot", Shoot.class);
+            put("TurnTarget", TurnTarget.class);
+            put("HaveTarget", HaveTarget.class);
+            put("HpLess", HpLess.class);
         }
     };
 
@@ -40,9 +54,7 @@ public class Loader {
         String confJson = Loader.class.getResource("/").getPath() + "project.b3";
         BehaviorTreeProject behaviorTreeProject = B3Loader.loadB3Project(confJson, extendNodes);
         Blackboard blackboard = new Blackboard();
-        BehaviorTree behaviorTree = behaviorTreeProject.findBTTreeByTitle("tree1");
+        BehaviorTree behaviorTree = behaviorTreeProject.findBTTreeByTitle("b3");
         behaviorTree.tick(new Object(), blackboard);
-
-
     }
 }

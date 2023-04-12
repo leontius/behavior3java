@@ -14,7 +14,6 @@ public class SubTree extends Action {
     private BehaviorTree subTree;
 
 
-
     @Override
     public String getCategory() {
         return B3Const.ACTION;
@@ -22,9 +21,10 @@ public class SubTree extends Action {
 
     @Override
     public B3Status onTick(Tick tick) {
-        //子树可能没有加载上来，所以要延迟加载执行
+        // 子树可能没有加载上来，所以要延迟加载执行
         if (subTree == null) {
-            subTree = projectInfo.findBTTreeById(getName());//此处name为子树的id
+            // 此处name为子树的id
+            subTree = projectInfo.findBTTreeById(getName());
         }
         if (subTree == null) {
             return B3Status.ERROR;

@@ -1,5 +1,7 @@
 package com.github.silencesu.behavior3java.core;
 
+import java.util.List;
+
 /**
  * 组合节点
  *
@@ -25,11 +27,25 @@ public interface IComposite {
     BaseNode getChild(int index);
 
     /**
+     * 获取所有子节点
+     *
+     * @return
+     */
+    List<BaseNode> getChildList();
+
+    /**
      * 增加一个子节点
      *
      * @param baseNode
      */
     void addChild(BaseNode baseNode);
+
+    /**
+     * 打乱子节点
+     *
+     * @return
+     */
+    void shuffle();
 
 
 }
