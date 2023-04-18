@@ -12,6 +12,7 @@ import java.util.Map;
  * @author SilenceSu
  * @Email Silence.Sx@Gmail.com
  * Created by Silence on 2019/3/2.
+ * @version $Id: $Id
  */
 @Data
 public abstract class BaseNode implements INode, INodeWorker {
@@ -28,27 +29,32 @@ public abstract class BaseNode implements INode, INodeWorker {
     protected BehaviorTreeProject projectInfo;
 
 
+    /** {@inheritDoc} */
     @Override
     public void onEnter(Tick tick) {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public void onOpen(Tick tick) {
 
     }
 
 
+    /** {@inheritDoc} */
     @Override
     public void onClose(Tick tick) {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public void onExit(Tick tick) {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public void initialize(BTNodeCfg nodeCfg) {
 
@@ -61,6 +67,7 @@ public abstract class BaseNode implements INode, INodeWorker {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public B3Status run(Tick tick) {
 
@@ -83,6 +90,7 @@ public abstract class BaseNode implements INode, INodeWorker {
     }
 
 
+    /** {@inheritDoc} */
     @Override
     public void enter(Tick tick) {
         tick.enterNode(this);
@@ -90,6 +98,7 @@ public abstract class BaseNode implements INode, INodeWorker {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public void open(Tick tick) {
 
@@ -101,6 +110,7 @@ public abstract class BaseNode implements INode, INodeWorker {
         this.onOpen(tick);
     }
 
+    /** {@inheritDoc} */
     @Override
     public B3Status tick(Tick tick) {
 
@@ -109,6 +119,7 @@ public abstract class BaseNode implements INode, INodeWorker {
         return this.onTick(tick);
     }
 
+    /** {@inheritDoc} */
     @Override
     public void close(Tick tick) {
         tick.closeNode(this);
@@ -117,6 +128,7 @@ public abstract class BaseNode implements INode, INodeWorker {
 
     }
 
+    /** {@inheritDoc} */
     @Override
     public void exit(Tick tick) {
         tick.exitNNode(this
@@ -124,16 +136,19 @@ public abstract class BaseNode implements INode, INodeWorker {
         this.onExit(tick);
     }
 
+    /** {@inheritDoc} */
     @Override
     public B3Status execute(Tick tick) {
         return this.run(tick);
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getName() {
         return this.name;
     }
 
+    /** {@inheritDoc} */
     @Override
     public String getTitle() {
         return this.title;

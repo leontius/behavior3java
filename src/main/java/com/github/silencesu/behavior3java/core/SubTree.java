@@ -8,17 +8,20 @@ import com.github.silencesu.behavior3java.constant.B3Status;
  *
  * @author ming ming
  * @Email mingtingjian@sina.com Created by ming ming on 2020/1/7.
+ * @version $Id: $Id
  */
 public class SubTree extends Action {
 
     private BehaviorTree subTree;
 
 
+    /** {@inheritDoc} */
     @Override
     public String getCategory() {
         return B3Const.ACTION;
     }
 
+    /** {@inheritDoc} */
     @Override
     public B3Status onTick(Tick tick) {
         // 子树可能没有加载上来，所以要延迟加载执行

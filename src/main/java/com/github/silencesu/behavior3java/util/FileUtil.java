@@ -8,17 +8,20 @@ import java.nio.charset.StandardCharsets;
 
 /**
  * 文件工具
+ *
  * @author SilenceSu
  * @Email Silence.Sx@Gmail.com
  * Created by Silence on 2019/3/2.
+ * @version $Id: $Id
  */
 public class FileUtil {
 
 
     /**
      * 读取文件内容
-     * @param Path
-     * @return
+     *
+     * @param Path a {@link java.lang.String} object.
+     * @return a {@link java.lang.String} object.
      */
     public static String readFile(String Path) {
 

@@ -14,6 +14,7 @@ import java.util.Map;
  * @author SilenceSu
  * @Email Silence.Sx@Gmail.com
  * Created by Silence on 2019/3/2.
+ * @version $Id: $Id
  */
 @Data
 @Slf4j
@@ -26,10 +27,22 @@ public class BehaviorTreeProject {
 
     private Map<String, BehaviorTree> idTreeMap = new HashMap<>();
 
+    /**
+     * <p>findBTTreeByTitle.</p>
+     *
+     * @param treeTitle a {@link java.lang.String} object.
+     * @return a {@link com.github.silencesu.behavior3java.core.BehaviorTree} object.
+     */
     public BehaviorTree findBTTreeByTitle(String treeTitle) {
         return titleTreeMap.get(treeTitle.trim());
     }
 
+    /**
+     * <p>findBTTreeById.</p>
+     *
+     * @param id a {@link java.lang.String} object.
+     * @return a {@link com.github.silencesu.behavior3java.core.BehaviorTree} object.
+     */
     public BehaviorTree findBTTreeById(String id) {
         return idTreeMap.get(id);
     }

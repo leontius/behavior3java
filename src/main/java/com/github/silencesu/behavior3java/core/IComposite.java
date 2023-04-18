@@ -8,42 +8,44 @@ import java.util.List;
  * @author SilenceSu
  * @Email Silence.Sx@Gmail.com
  * Created by Silence on 2019/3/2.
+ * @version $Id: $Id
  */
 public interface IComposite {
 
     /**
      * 子节点count
      *
-     * @return
+     * @return a int.
      */
     int getChildCount();
 
     /**
      * 根据id 索引 子节点
      *
-     * @param index
-     * @return
+     * @param index a int.
+     * @return a {@link com.github.silencesu.behavior3java.core.BaseNode} object.
      */
     BaseNode getChild(int index);
 
     /**
      * 获取所有子节点
      *
-     * @return
+     * @return a {@link java.util.List} object.
+     * @since 1.1.1
      */
     List<BaseNode> getChildList();
 
     /**
      * 增加一个子节点
      *
-     * @param baseNode
+     * @param baseNode a {@link com.github.silencesu.behavior3java.core.BaseNode} object.
      */
     void addChild(BaseNode baseNode);
 
     /**
      * 打乱子节点
      *
-     * @return
+     * @since 1.1.1
      */
     void shuffle();
 

@@ -7,9 +7,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * <p>BTTreeProjectDataCfg class.</p>
+ *
  * @author SilenceSu
  * @Email Silence.Sx@Gmail.com
  * Created by Silence on 2020/1/18.
+ * @version $Id: $Id
  */
 @Setter
 @Getter

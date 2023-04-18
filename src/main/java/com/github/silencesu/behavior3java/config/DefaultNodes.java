@@ -21,6 +21,7 @@ import java.util.Map;
  * @author SilenceSu
  * @Email Silence.Sx@Gmail.com
  * Created by Silence on 2019/3/6.
+ * @version $Id: $Id
  */
 public class DefaultNodes {
     /**
@@ -58,12 +59,20 @@ public class DefaultNodes {
 
     /**
      * 扩充Nodes节点
+     *
+     * @param maps a {@link java.util.Map} object.
+     * @return a {@link java.util.Map} object.
      */
     public static Map<String, Class<? extends BaseNode>> extendCustomNodes(Map<String, Class<? extends BaseNode>> maps) {
         defaultNodes.putAll(maps);
         return defaultNodes;
     }
 
+    /**
+     * <p>get.</p>
+     *
+     * @return a {@link java.util.Map} object.
+     */
     public static Map<String, Class<? extends BaseNode>> get() {
         return defaultNodes;
     }

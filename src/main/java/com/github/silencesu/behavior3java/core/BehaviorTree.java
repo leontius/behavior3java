@@ -25,6 +25,7 @@ import java.util.UUID;
  * @author SilenceSu
  * @Email Silence.Sx@Gmail.com
  * Created by Silence on 2019/3/2.
+ * @version $Id: $Id
  */
 @Getter
 @Setter
@@ -42,6 +43,11 @@ public class BehaviorTree {
     private BehaviorTreeProject projectInfo;
 
 
+    /**
+     * <p>load.</p>
+     *
+     * @param cfg a {@link com.github.silencesu.behavior3java.config.BTTreeCfg} object.
+     */
     public void load(BTTreeCfg cfg) {
         Map<String, Class<? extends BaseNode>> hash = new HashMap<>();
         try (ScanResult scanResult = new ClassGraph()
@@ -57,6 +63,12 @@ public class BehaviorTree {
     }
 
 
+    /**
+     * <p>load.</p>
+     *
+     * @param cfg a {@link com.github.silencesu.behavior3java.config.BTTreeCfg} object.
+     * @param extendNodes a {@link java.util.Map} object.
+     */
     public void load(BTTreeCfg cfg, Map<String, Class<? extends BaseNode>> extendNodes) {
 
         this.titile = cfg.getTitle();
@@ -140,6 +152,14 @@ public class BehaviorTree {
     }
 
 
+    /**
+     * <p>tick.</p>
+     *
+     * @param t a T object.
+     * @param blackboard a {@link com.github.silencesu.behavior3java.core.Blackboard} object.
+     * @param <T> a T object.
+     * @return a {@link com.github.silencesu.behavior3java.constant.B3Status} object.
+     */
     public <T> B3Status tick(T t, Blackboard blackboard) {
 
         if (blackboard == null) {

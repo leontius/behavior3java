@@ -14,6 +14,7 @@ import java.util.Map;
  * @author SilenceSu
  * @Email Silence.Sx@Gmail.com
  * Created by Silence on 2019/3/2.
+ * @version $Id: $Id
  */
 @Data
 public class Blackboard {
@@ -55,6 +56,13 @@ public class Blackboard {
 
     }
 
+    /**
+     * <p>getMemeory.</p>
+     *
+     * @param treeScope a {@link java.lang.String} object.
+     * @param nodeScope a {@link java.lang.String} object.
+     * @return a {@link com.github.silencesu.behavior3java.core.Blackboard.Memory} object.
+     */
     public Memory getMemeory(String treeScope, String nodeScope) {
 
         TreeMemory tm = getTreeMemory(treeScope);
@@ -94,12 +102,29 @@ public class Blackboard {
     }
 
 
+    /**
+     * <p>setParam.</p>
+     *
+     * @param key a {@link java.lang.String} object.
+     * @param value a {@link java.lang.Object} object.
+     * @param treeScope a {@link java.lang.String} object.
+     * @param nodeScope a {@link java.lang.String} object.
+     */
     public void setParam(String key, Object value, String treeScope, String nodeScope) {
         Memory memory = getMemeory(treeScope, nodeScope);
         memory.getMemeory().put(key, value);
     }
 
 
+    /**
+     * <p>getParam.</p>
+     *
+     * @param key a {@link java.lang.String} object.
+     * @param treeScope a {@link java.lang.String} object.
+     * @param nodeScope a {@link java.lang.String} object.
+     * @param <T> a T object.
+     * @return a T object.
+     */
     @SuppressWarnings("unchecked")
     public <T> T getParam(String key, String treeScope, String nodeScope) {
         Memory memory = getMemeory(treeScope, nodeScope);

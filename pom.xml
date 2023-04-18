@@ -11,12 +11,16 @@
     <packaging>jar</packaging>
 
     <description>基于behavior3edit行为树的java版</description>
-    <url>https://github.com/SilenceSu/behavior3java</url>
+    <url>https://github.com/leontius/behavior3java</url>
 
     <developers>
         <developer>
             <name>Silence</name>
             <email>Silence.sx@gmail.com</email>
+        </developer>
+        <developer>
+            <name>Leon Zhang</name>
+            <email>leontius.zy@gmail.com</email>
         </developer>
     </developers>
 
@@ -29,9 +33,9 @@
 
 
     <scm>
-        <connection>scm:git:git@github.com:SilenceSu/behavior3java.git</connection>
-        <developerConnection>scm:git:git@github.com:SilenceSu/behavior3java.git</developerConnection>
-        <url>https://github.com/SilenceSu/behavior3java</url>
+        <connection>scm:git:git@github.com:leontius/behavior3java.git</connection>
+        <developerConnection>scm:git:git@github.com:leontius/behavior3java.git</developerConnection>
+        <url>https://github.com/leontius/behavior3java</url>
     </scm>
 
 
