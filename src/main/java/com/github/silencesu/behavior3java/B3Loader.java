@@ -18,6 +18,9 @@ import java.util.Map;
  */
 public class B3Loader {
 
+    public static BehaviorTree loadB3Tree(String treeJson) {
+        return loadB3Tree(treeJson, null);
+    }
 
     /**
      * @param treeJson    行为树配置文件
@@ -40,6 +43,10 @@ public class B3Loader {
 
     }
 
+    public static BehaviorTreeProject loadB3Project(String projectJson) {
+        return loadB3Project(projectJson, null);
+    }
+
     /**
      * 加载工程
      *
@@ -53,6 +60,4 @@ public class B3Loader {
         project.initProject(projectCfg, extendNodes);
         return project;
     }
-
-
 }

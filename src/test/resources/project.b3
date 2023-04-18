@@ -135,7 +135,7 @@
             "title": "Wait <milliseconds>ms",
             "description": "",
             "properties": {
-              "milliseconds": 100
+              "milliseconds": 1000
             },
             "display": {
               "x": 0,

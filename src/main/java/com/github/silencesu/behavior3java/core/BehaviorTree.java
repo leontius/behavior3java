@@ -1,10 +1,15 @@
 package com.github.silencesu.behavior3java.core;
 
+import com.github.silencesu.behavior3java.annotations.ExtendNode;
 import com.github.silencesu.behavior3java.config.BTNodeCfg;
 import com.github.silencesu.behavior3java.config.BTTreeCfg;
 import com.github.silencesu.behavior3java.config.DefaultNodes;
 import com.github.silencesu.behavior3java.constant.B3Const;
 import com.github.silencesu.behavior3java.constant.B3Status;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ClassInfoList;
+import io.github.classgraph.ScanResult;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -37,9 +42,18 @@ public class BehaviorTree {
     private BehaviorTreeProject projectInfo;
 
 
-
     public void load(BTTreeCfg cfg) {
-        load(cfg, new HashMap<>());
+        Map<String, Class<? extends BaseNode>> hash = new HashMap<>();
+        try (ScanResult scanResult = new ClassGraph()
+                .enableAllInfo()
+                .scan()) {
+            ClassInfoList classInfos = scanResult.getClassesWithAnnotation(ExtendNode.class);
+            for (ClassInfo classInfo : classInfos) {
+                Class<? extends BaseNode> clazz = (Class<? extends BaseNode>) classInfo.loadClass();
+                hash.put(clazz.getSimpleName(), clazz);
+            }
+        }
+        load(cfg, hash);
     }
 
 
@@ -67,7 +81,7 @@ public class BehaviorTree {
             BaseNode node = null;
 
             //检查是或否为子树
-            if (nodeCfg.getCategory()!=null && nodeCfg.getCategory().equals(B3Const.SUBTREE)) {
+            if (nodeCfg.getCategory() != null && nodeCfg.getCategory().equals(B3Const.SUBTREE)) {
                 node = new SubTree();
             } else {
                 //普通结点加载

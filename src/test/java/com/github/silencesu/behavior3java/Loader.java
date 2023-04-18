@@ -1,21 +1,17 @@
 package com.github.silencesu.behavior3java;
 
-import com.github.silencesu.behavior3java.actions.FindItem;
-import com.github.silencesu.behavior3java.actions.Log;
-import com.github.silencesu.behavior3java.actions.RandMove;
-import com.github.silencesu.behavior3java.actions.RandWait;
-import com.github.silencesu.behavior3java.actions.Shoot;
-import com.github.silencesu.behavior3java.actions.TurnTarget;
-import com.github.silencesu.behavior3java.condition.HaveTarget;
-import com.github.silencesu.behavior3java.condition.HpLess;
-import com.github.silencesu.behavior3java.core.BaseNode;
+import com.alibaba.fastjson.JSON;
+import com.github.silencesu.behavior3java.annotations.ExtendNode;
+import com.github.silencesu.behavior3java.constant.B3Status;
 import com.github.silencesu.behavior3java.core.BehaviorTree;
 import com.github.silencesu.behavior3java.core.BehaviorTreeProject;
 import com.github.silencesu.behavior3java.core.Blackboard;
+import io.github.classgraph.ClassGraph;
+import io.github.classgraph.ClassInfo;
+import io.github.classgraph.ClassInfoList;
+import io.github.classgraph.ScanResult;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 测试用例
@@ -24,27 +20,13 @@ import java.util.Map;
  * @Email Silence.Sx@Gmail.com
  * Created by Silence on 2019/3/2.
  */
+@Slf4j
 public class Loader {
-
-    //自定义扩展log
-    private static Map<String, Class<? extends BaseNode>> extendNodes = new HashMap<String, Class<? extends BaseNode>>() {
-        {
-            put("Log", Log.class);
-            put("FindItem", FindItem.class);
-            put("RandMove", RandMove.class);
-            put("RandWait", RandWait.class);
-            put("Shoot", Shoot.class);
-            put("TurnTarget", TurnTarget.class);
-            put("HaveTarget", HaveTarget.class);
-            put("HpLess", HpLess.class);
-        }
-    };
-
 
     @Test
     public void loadTree() {
         String confJson = Loader.class.getResource("/").getPath() + "tree.json";
-        BehaviorTree behaviorTree = B3Loader.loadB3Tree(confJson, extendNodes);
+        BehaviorTree behaviorTree = B3Loader.loadB3Tree(confJson);
         Blackboard blackboard = new Blackboard();
         behaviorTree.tick(new Object(), blackboard);
     }
@@ -52,9 +34,28 @@ public class Loader {
     @Test
     public void loadProject() {
         String confJson = Loader.class.getResource("/").getPath() + "project.b3";
-        BehaviorTreeProject behaviorTreeProject = B3Loader.loadB3Project(confJson, extendNodes);
+        BehaviorTreeProject behaviorTreeProject = B3Loader.loadB3Project(confJson);
         Blackboard blackboard = new Blackboard();
         BehaviorTree behaviorTree = behaviorTreeProject.findBTTreeByTitle("b3");
-        behaviorTree.tick(new Object(), blackboard);
+        for (;;) {
+            B3Status status = behaviorTree.tick(new Object(), blackboard);
+            if (B3Status.SUCCESS.equals(status)) {
+                log.info("{}", status);
+                break;
+            }
+        }
+    }
+
+    @Test
+    public void scan() {
+        try (ScanResult scanResult = new ClassGraph()
+                .enableAllInfo()
+                .scan()) {
+            ClassInfoList classInfos = scanResult.getClassesWithAnnotation(ExtendNode.class);
+            for (ClassInfo classInfo : classInfos) {
+                Class<?> hpLess = classInfo.loadClass();
+                log.info("{}", JSON.toJSONString(hpLess.getSimpleName()));
+            }
+        }
     }
 }

@@ -42,20 +42,16 @@ public class BehaviorTreeProject {
      * @param extendNodes 扩展结点
      */
     public void initProject(BTTreeProjectCfg projectCfg, Map<String, Class<? extends BaseNode>> extendNodes) {
-
-
         for (BTTreeCfg treeCfg : projectCfg.getData().getTrees()) {
-
             BehaviorTree behaviorTree = new BehaviorTree();
             behaviorTree.setProjectInfo(this);
-            behaviorTree.load(treeCfg, extendNodes);
-
+            if (extendNodes != null && !extendNodes.isEmpty()) {
+                behaviorTree.load(treeCfg, extendNodes);
+            } else {
+                behaviorTree.load(treeCfg);
+            }
             titleTreeMap.put(treeCfg.getTitle(), behaviorTree);
             idTreeMap.put(treeCfg.getId(), behaviorTree);
-
-
         }
-
-
     }
 }

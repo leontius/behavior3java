@@ -36,16 +36,11 @@ public class Wait extends Action {
 
     @Override
     public B3Status onTick(Tick tick) {
-        log.debug("Wait Action: {}", endTime);
         long currentTime = System.currentTimeMillis();
-        Long startTime =  tick.getBlackboard().getParam(B3Const.START_TIME, tick.getTree().getId(), this.getId());
-
+        Long startTime = tick.getBlackboard().getParam(B3Const.START_TIME, tick.getTree().getId(), this.getId());
         if (currentTime - startTime > this.endTime) {
             return B3Status.SUCCESS;
         }
-
-
         return B3Status.RUNNING;
     }
-
 }
