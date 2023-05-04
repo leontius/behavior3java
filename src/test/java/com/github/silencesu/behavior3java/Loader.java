@@ -13,6 +13,8 @@ import io.github.classgraph.ScanResult;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * 测试用例
  *
@@ -40,9 +42,14 @@ public class Loader {
         for (;;) {
             B3Status status = behaviorTree.tick(new Object(), blackboard);
             log.info("status {}", status);
-            if (B3Status.SUCCESS.equals(status)) {
+            if (!B3Status.RUNNING.equals(status)) {
                 log.info("{}", status);
                 break;
+            }
+            try {
+                TimeUnit.SECONDS.sleep(1L);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
         }
     }

@@ -27,16 +27,17 @@ public class FindItem extends Action {
 
     @Override
     public B3Status onTick(Tick tick) {
-        if (B3Status.SUCCESS.equals(getStatus())) {
-            return B3Status.SUCCESS;
+        if (this.finished()) {
+            return this.getCurrentStatus();
         }
-        tick.getTree().runAsyncAction(()-> {
+        this.runAsyncAction(() -> {
             try {
+                log.info("执行 FindItem 行为");
                 TimeUnit.SECONDS.sleep(3L);
             } catch (InterruptedException e) {
                 throw new RuntimeException(e);
             }
-        }, this);
+        }, tick.getTree().getThreadPool());
         log.info("FindItem Action: eytpe={}, range={}, index={} tick:{}", etype, range, index, tick.getTarget());
         return B3Status.RUNNING;
     }

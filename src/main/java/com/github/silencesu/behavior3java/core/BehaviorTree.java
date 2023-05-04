@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadFactory;
@@ -60,7 +59,7 @@ public class BehaviorTree {
     /**
      * 线程池
      */
-    private final ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 30, 30L, TimeUnit.SECONDS,
+    private final ThreadPoolExecutor threadPool = new ThreadPoolExecutor(10, 30, 30L, TimeUnit.SECONDS,
             new LinkedBlockingQueue<>(100), new B3ThreadFactory(), new B3RejectedExecutionHandler());
 
     /**
@@ -202,7 +201,7 @@ public class BehaviorTree {
 
         // does not close if it is still open in this tick
         int start = 0;
-        for (int i = 0; i < (lastOpenNodes.size() > currOpenNodes.size() ? currOpenNodes.size() : lastOpenNodes.size()); i++) {
+        for (int i = 0; i < (Math.min(lastOpenNodes.size(), currOpenNodes.size())); i++) {
             start = i + 1;
             if (lastOpenNodes.get(i) != currOpenNodes.get(i)) {
                 break;
@@ -233,7 +232,7 @@ public class BehaviorTree {
         @Override
         public Thread newThread(Runnable r) {
             Thread t = new Thread(r);
-            String threadName = BehaviorTree.class.getSimpleName() + count.addAndGet(1);
+            String threadName = BehaviorTree.class.getSimpleName() + "-" + count.addAndGet(1);
             t.setName(threadName);
             return t;
         }
@@ -251,31 +250,6 @@ public class BehaviorTree {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }
-    }
-
-    /**
-     * 执行异步行为
-     *
-     * @param runnable 线程方法
-     * @param action   行为类
-     */
-    public void runAsyncAction(Runnable runnable, Action action) {
-        if (action.addFutureCount() == 1) {
-            CompletableFuture<Void> future = CompletableFuture.runAsync(runnable, this.threadPoolExecutor);
-            // 设置异常情况
-            future.exceptionally(e -> {
-                failedCount.incrementAndGet();
-                action.setStatus(B3Status.ERROR);
-                log.error("Action [" + action.getClass().getSimpleName() + "] Failed..." + e);
-                return null;
-            });
-            // 任务结束之后
-            future.whenComplete((v, throwable) -> {
-                action.setStatus(B3Status.SUCCESS);
-                // 执行完了之后释放异步标记
-                action.setFutureCountZero();
-            });
         }
     }
 }

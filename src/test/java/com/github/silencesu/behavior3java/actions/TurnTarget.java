@@ -22,6 +22,8 @@ public class TurnTarget extends Action {
     @Override
     public B3Status onTick(Tick tick) {
         log.info("TurnTarget Action = index :{}, tick:{}", index, tick.getTarget());
+        this.setFutureCountZero();
+        this.setCurrentStatus(B3Status.SUCCESS);
         return B3Status.SUCCESS;
     }
 }
