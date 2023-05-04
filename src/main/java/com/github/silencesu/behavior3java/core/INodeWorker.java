@@ -6,9 +6,9 @@ import com.github.silencesu.behavior3java.constant.B3Status;
  * <p>INodeWorker interface.</p>
  *
  * @author SilenceSu
+ * @version $Id: $Id
  * @Email Silence.Sx@Gmail.com
  * Created by Silence on 2019/3/2.
- * @version $Id: $Id
  */
 public interface INodeWorker {
 

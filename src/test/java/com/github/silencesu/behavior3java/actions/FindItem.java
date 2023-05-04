@@ -7,6 +7,8 @@ import com.github.silencesu.behavior3java.core.Action;
 import com.github.silencesu.behavior3java.core.Tick;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.TimeUnit;
+
 @Slf4j
 @ExtendNode
 public class FindItem extends Action {
@@ -25,7 +27,17 @@ public class FindItem extends Action {
 
     @Override
     public B3Status onTick(Tick tick) {
-        log.info("FindItem Action: eytpe={}, range={}, index={}", etype, range, index);
-        return B3Status.SUCCESS;
+        if (B3Status.SUCCESS.equals(getStatus())) {
+            return B3Status.SUCCESS;
+        }
+        tick.getTree().runAsyncAction(()-> {
+            try {
+                TimeUnit.SECONDS.sleep(3L);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }, this);
+        log.info("FindItem Action: eytpe={}, range={}, index={} tick:{}", etype, range, index, tick.getTarget());
+        return B3Status.RUNNING;
     }
 }

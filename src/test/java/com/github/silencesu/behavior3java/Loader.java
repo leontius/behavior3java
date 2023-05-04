@@ -39,6 +39,7 @@ public class Loader {
         BehaviorTree behaviorTree = behaviorTreeProject.findBTTreeByTitle("b3");
         for (;;) {
             B3Status status = behaviorTree.tick(new Object(), blackboard);
+            log.info("status {}", status);
             if (B3Status.SUCCESS.equals(status)) {
                 log.info("{}", status);
                 break;

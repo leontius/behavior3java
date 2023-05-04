@@ -18,14 +18,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 行为树
  *
  * @author SilenceSu
+ * @version $Id: $Id
  * @Email Silence.Sx@Gmail.com
  * Created by Silence on 2019/3/2.
- * @version $Id: $Id
  */
 @Getter
 @Setter
@@ -39,9 +46,22 @@ public class BehaviorTree {
 
     private BaseNode root;
 
-    //project 引用对象
+    /**
+     * project 引用对象
+     */
     private BehaviorTreeProject projectInfo;
 
+
+    /**
+     * 失败数量
+     */
+    private AtomicInteger failedCount = new AtomicInteger(0);
+
+    /**
+     * 线程池
+     */
+    private final ThreadPoolExecutor threadPoolExecutor = new ThreadPoolExecutor(10, 30, 30L, TimeUnit.SECONDS,
+            new LinkedBlockingQueue<>(100), new B3ThreadFactory(), new B3RejectedExecutionHandler());
 
     /**
      * <p>load.</p>
@@ -66,7 +86,7 @@ public class BehaviorTree {
     /**
      * <p>load.</p>
      *
-     * @param cfg a {@link com.github.silencesu.behavior3java.config.BTTreeCfg} object.
+     * @param cfg         a {@link com.github.silencesu.behavior3java.config.BTTreeCfg} object.
      * @param extendNodes a {@link java.util.Map} object.
      */
     public void load(BTTreeCfg cfg, Map<String, Class<? extends BaseNode>> extendNodes) {
@@ -155,9 +175,9 @@ public class BehaviorTree {
     /**
      * <p>tick.</p>
      *
-     * @param t a T object.
+     * @param t          a T object.
      * @param blackboard a {@link com.github.silencesu.behavior3java.core.Blackboard} object.
-     * @param <T> a T object.
+     * @param <T>        a T object.
      * @return a {@link com.github.silencesu.behavior3java.constant.B3Status} object.
      */
     public <T> B3Status tick(T t, Blackboard blackboard) {
@@ -202,5 +222,60 @@ public class BehaviorTree {
         return status;
     }
 
+    /**
+     * 线程工厂类
+     * 生成的线程名词前缀、是否为守护线程以及优先级等
+     */
+    private static class B3ThreadFactory implements ThreadFactory {
 
+        private AtomicInteger count = new AtomicInteger(0);
+
+        @Override
+        public Thread newThread(Runnable r) {
+            Thread t = new Thread(r);
+            String threadName = BehaviorTree.class.getSimpleName() + count.addAndGet(1);
+            t.setName(threadName);
+            return t;
+        }
+    }
+
+
+    /**
+     * 拒绝策略对象
+     */
+    private static class B3RejectedExecutionHandler implements RejectedExecutionHandler {
+        @Override
+        public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+            try {
+                executor.getQueue().put(r);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * 执行异步行为
+     *
+     * @param runnable 线程方法
+     * @param action   行为类
+     */
+    public void runAsyncAction(Runnable runnable, Action action) {
+        if (action.addFutureCount() == 1) {
+            CompletableFuture<Void> future = CompletableFuture.runAsync(runnable, this.threadPoolExecutor);
+            // 设置异常情况
+            future.exceptionally(e -> {
+                failedCount.incrementAndGet();
+                action.setStatus(B3Status.ERROR);
+                log.error("Action [" + action.getClass().getSimpleName() + "] Failed..." + e);
+                return null;
+            });
+            // 任务结束之后
+            future.whenComplete((v, throwable) -> {
+                action.setStatus(B3Status.SUCCESS);
+                // 执行完了之后释放异步标记
+                action.setFutureCountZero();
+            });
+        }
+    }
 }
